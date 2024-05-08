@@ -6,8 +6,8 @@
 
 1. Terminal run
 
-![Terminal Run](./images/TerminalRun.png)
+![Terminal Run](./images/TerminalRun.jpg)
 
 2. Browser run
 
-![Browser Run](./images/BrowserRun.png)
+![Browser Run](./images/testonadam.jpg)

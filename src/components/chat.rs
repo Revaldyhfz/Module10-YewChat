@@ -23,6 +23,7 @@ pub enum MsgTypes {
     Users,
     Register,
     Message,
+    UserStatus, // Add UserStatus message type
 }
 
 #[derive(Serialize, Deserialize)]
@@ -37,6 +38,7 @@ struct WebSocketMessage {
 struct UserProfile {
     name: String,
     avatar: String,
+    is_online: bool, // Add is_online field
 }
 
 pub struct Chat {
@@ -46,6 +48,15 @@ pub struct Chat {
     wss: WebsocketService,
     messages: Vec<MessageData>,
 }
+
+impl Chat {
+    fn update_user_status(&mut self, user_name: &str, is_online: bool) {
+        if let Some(user) = self.users.iter_mut().find(|u| u.name == user_name) {
+            user.is_online = is_online;
+        }
+    }
+}
+
 impl Component for Chat {
     type Message = Msg;
     type Properties = ();
@@ -97,9 +108,18 @@ impl Component for Chat {
                                     u
                                 )
                                 .into(),
+                                is_online: true, // Assume all users are initially online
                             })
                             .collect();
                         return true;
+                    }
+                    MsgTypes::UserStatus => {
+                        if let Some(user_name) = msg.data {
+                            self.update_user_status(&user_name, true); // Set user as online
+                            return true;
+                        } else {
+                            return false;
+                        }
                     }
                     MsgTypes::Message => {
                         let message_data: MessageData =
