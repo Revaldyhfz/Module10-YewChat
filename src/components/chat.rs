@@ -157,7 +157,7 @@ impl Component for Chat {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let submit = ctx.link().callback(|_| Msg::SubmitMessage);
-
+    
         html! {
             <div class="flex w-screen">
                 <div class="flex-none w-56 h-screen bg-gray-100">
@@ -172,6 +172,9 @@ impl Component for Chat {
                                     <div class="flex-grow p-3">
                                         <div class="flex text-xs justify-between">
                                             <div>{u.name.clone()}</div>
+                                            <div class={if u.is_online { "text-green-500" } else { "text-red-500" }}>
+                                                {if u.is_online { "Online" } else { "Offline" }}
+                                            </div>
                                         </div>
                                         <div class="text-xs text-gray-400">
                                             {"Hi there!"}
@@ -207,7 +210,6 @@ impl Component for Chat {
                                 }
                             }).collect::<Html>()
                         }
-
                     </div>
                     <div class="w-full h-14 flex px-3 items-center">
                         <input ref={self.chat_input.clone()} type="text" placeholder="Message" class="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700" name="message" required=true />
